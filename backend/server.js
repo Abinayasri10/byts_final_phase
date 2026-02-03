@@ -2,7 +2,13 @@ import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import http from 'http';
+import http from 'http'
+import session from 'express-session'
+
+// Load environment variables FIRST before importing passport
+dotenv.config()
+
+import passport from './config/passport.js'
 
 import authRoutes from './routes/authRoutes.js'
 import profileRoutes from './routes/profileRoutes.js'
@@ -27,11 +33,31 @@ dotenv.config()
 const app = express()
 
 // Middleware
-app.use(cors())
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true,
+}))
 app.use(express.json())
 
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ limit: '50mb', extended: true }))
+
+// Session configuration
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'your_secure_session_secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    },
+  })
+)
+
+// Initialize Passport
+app.use(passport.initialize())
+app.use(passport.session())
 
 // Apply logger after basic parsing but before routes
 app.use(requestLogger)

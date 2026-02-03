@@ -96,6 +96,20 @@ export const login = async (req, res) => {
   }
 }
 
+export const authCallback = async (req, res) => {
+  try {
+    const token = generateToken(req.user._id)
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000'
+
+    res.redirect(`${frontendUrl}/oauth-success?token=${token}&userId=${req.user._id}&profileCompleted=${req.user.profileCompleted}`)
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    })
+  }
+}
+
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body
