@@ -26,6 +26,8 @@ import OpportunitiesPage from './pages/OpportunitiesPage.jsx'
 import ExperiencesPage from './pages/ExperiencesPage.jsx'
 import ExperienceDetailPage from './pages/ExperienceDetailPage.jsx'
 import SubmitOpportunityPage from './pages/SubmitOpportunityPage.jsx'
+import ContactPage from './pages/ContactPage.jsx'
+import { Contact } from 'lucide-react'
 
 function App() {
   return (
@@ -125,7 +127,7 @@ function App() {
 
         <Route path="/analytics" element={<ProtectedRoute><UnderDevelopmentPage /></ProtectedRoute>} />
 
-        <Route path="/contact" element={<ProtectedRoute><UnderDevelopmentPage /></ProtectedRoute>} />
+        <Route path="/contact" element={<ProtectedRoute><ContactPage /></ProtectedRoute>} />
 
         <Route path="/" element={
           localStorage.getItem('userRole') === 'admin'
